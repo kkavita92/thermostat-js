@@ -26,9 +26,9 @@ $( document ).ready(function() {
   function updatePowerSaving() {
     switch(thermostat.isPowerSaving()) {
       case true:
-        return 'On';
+        return 'on';
       case false:
-        return 'Off';
+        return 'off';
     }
   }
 
@@ -66,6 +66,6 @@ $( document ).ready(function() {
   $('#toggle-power-saving').on('click', function() {
     thermostat.togglePowerSaving();
     updateTemperature();
-    $('#power_saving > p').text(updatePowerSaving());
+    $('#toggle-power-saving > i').attr('class', 'fa fa-toggle-' + updatePowerSaving());
   });
 });
