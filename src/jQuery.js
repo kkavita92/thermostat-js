@@ -1,6 +1,14 @@
 $( document ).ready(function() {
   var thermostat = new Thermostat();
   var city;
+  // $.get("http://localhost:4567/time", function(data) {
+  //   var data = JSON.parse(data)
+  //   $('#time').text(data.time);
+  // });
+  $.get("http://localhost:4567/temperature", function(data) {
+    var data = JSON.parse(data)
+    $("#temperature>p").text(data.temperature);
+  });
 
   $('#search-city').on('change paster', function(){
     city = $('#search-city').val();
@@ -21,7 +29,8 @@ $( document ).ready(function() {
   function updateTemperature() {
     $('#temperature>p').text(thermostat.temperature());
     $('#temperature>p').attr('class', thermostat.currentEnergyUsage());
-  }
+    $.post("http://localhost:4567/temperature", {temperature: thermostat._temperature});
+}
 
   function updatePowerSaving() {
     switch(thermostat.isPowerSaving()) {
