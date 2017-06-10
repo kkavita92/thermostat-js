@@ -13,14 +13,12 @@ end
 
 post '/temperature' do
   File.open("weatherData.json", "w") do |data|
-    data.write params[:temperature]
-    end
+    data.write({temperature: params[:temperature]}.to_json)
+  end
 end
 
 get '/temperature' do
-  hash = {temperature: nil}
   File.open("weatherData.json", "r") do |data|
-    hash[:temperature] = data
+    p data
   end
-   p hash[:temperature]
 end

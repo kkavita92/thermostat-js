@@ -1,19 +1,24 @@
 $( document ).ready(function() {
   var thermostat = new Thermostat();
   var city;
-  // $.get("http://localhost:4567/time", function(data) {
-  //   var data = JSON.parse(data)
-  //   $('#time').text(data.time);
-  // });
+
   $.get("http://localhost:4567/temperature", function(data) {
-    var data = JSON.parse(data)
-    $("#temperature>p").text(data.temperature);
+    var data = JSON.parse(data);
+    thermostat._temperature = data.temperature;
+    loadTemperature();
   });
 
   $('#search-city').on('change paster', function(){
     city = $('#search-city').val();
     displayWeather(city);
   });
+
+  function loadTemperature() {
+    $("#temperature > p").text(thermostat.temperature());
+    $('#temperature > p').attr('class', thermostat.currentEnergyUsage());
+    $('#temperature > p').css("width", thermostat.temperature() + '%');
+    $('#energy > p').text(thermostat.currentEnergyUsage());
+  }
 
   function displayWeather(city) {
     var url = 'http://api.openweathermap.org/data/2.5/weather?q=';
@@ -26,10 +31,16 @@ $( document ).ready(function() {
     });
   }
 
+  function setTemperature() {
+    $('#temperature > p').text(thermostat.temperature());
+    $('#temperature > p').attr('class', thermostat.currentEnergyUsage());
+    $('#temperature > p').css("width", thermostat.temperature() + '%');
+  }
+
   function updateTemperature() {
-    $('#temperature>p').text(thermostat.temperature());
-    $('#temperature>p').attr('class', thermostat.currentEnergyUsage());
-    $.post("http://localhost:4567/temperature", {temperature: thermostat._temperature});
+    $('#temperature > p').text(thermostat.temperature());
+    $('#temperature > p').attr('class', thermostat.currentEnergyUsage());
+    $.post("http://localhost:4567/temperature", {temperature: thermostat._temperature} );
 }
 
   function updatePowerSaving() {
@@ -48,8 +59,6 @@ $( document ).ready(function() {
   function updateThermometer() {
     $('#temperature > p').css("width", thermostat.temperature() + '%');
   }
-
-  updateTemperature();
 
   $('#temp-up').on('click', function(){
     thermostat.increaseTemperature();
